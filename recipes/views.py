@@ -1,7 +1,6 @@
 from django.shortcuts import render
 
 from recipes.models import Recipe
-from utils.recipes.factory import make_recipe
 
 
 # Create your views here.
@@ -31,8 +30,12 @@ def category(request, category_id):
 
 
 def recipe(request, id):
+    recipe = Recipe.objects.filter(
+        pk=id,
+        is_published=True
+    ).order_by('-id').first()
     return render(request, 'recipes/pages/recipe.html', context={
-        'title': 'Recipe | Recipes',
-        'recipe': make_recipe(),
+        'title': f'{recipe.title} | Recipes',
+        'recipe': recipe,
         'is_detail_page': True,
     })
