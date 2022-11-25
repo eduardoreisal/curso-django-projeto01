@@ -10,7 +10,7 @@ def home(request):
         is_published=True
     ).order_by('-id')
     return render(request, 'recipes/pages/home.html', context={
-        'page': 'Home | Recipes',
+        'title': 'Home | Recipes',
         'recipes': recipes,
         # 'recipes': [make_recipe() for _ in range(10)],
     })
@@ -21,16 +21,18 @@ def category(request, category_id):
         category__id=category_id,
         is_published=True
     ).order_by('-id')
+    # If object is not found return None
+    category_name = getattr(recipes.first(), 'category', None)
     return render(request, 'recipes/pages/category.html', context={
-        'page': 'Category | Recipes',
         'recipes': recipes,
+        'title': f'{category_name} | Recipes',
         # 'recipes': [make_recipe() for _ in range(10)],
     })
 
 
 def recipe(request, id):
     return render(request, 'recipes/pages/recipe.html', context={
-        'page': 'Recipe | Recipes',
+        'title': 'Recipe | Recipes',
         'recipe': make_recipe(),
         'is_detail_page': True,
     })
